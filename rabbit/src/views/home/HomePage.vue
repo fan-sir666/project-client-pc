@@ -11,15 +11,21 @@ export default {
   name: "HomePage",
   setup: function () {
     const getLbt = async () => {
-      let res = await requestWithoutToken("/home/index", "get").then(
-        (value) => {
-          return value;
-        },
-        (reason) => {
-          return reason;
-        }
-      );
-      console.log(res);
+      // let res = await requestWithoutToken("/home/index", "get").then(
+      //   (value) => {
+      //     return value;
+      //   },
+      //   (reason) => {
+      //     return reason;
+      //   }
+      // );
+      // console.log(res);
+      try {
+        let res = await requestWithoutToken("/hom/index", "get");
+        console.log(res);
+      } catch (e) {
+        throw new Error(e);
+      }
     };
     return {
       getLbt,

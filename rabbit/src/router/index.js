@@ -1,11 +1,20 @@
 import { createRouter, createWebHashHistory } from "vue-router";
-import HomePage from "@/views/home/HomePage";
 
 const routes = [
   // 首页
   {
     path: "/",
-    component: HomePage,
+    component: import("@/views/home/HomePage"),
+  },
+  // 首页
+  {
+    path: "/category/:id",
+    component: import("@/views/category/TopCategoryPage"),
+  },
+  // 首页
+  {
+    path: "/category/sub/:id",
+    component: import("@/views/category/SubcategoryPage"),
   },
 ];
 
