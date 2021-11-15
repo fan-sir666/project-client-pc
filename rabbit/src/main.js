@@ -8,5 +8,7 @@ import store from "./store";
 import "normalize.css";
 // 公共样式
 import "@/assets/styles/common.less";
+// 使用插件
+import library from "@/components/library/index";
 
-createApp(App).use(store).use(router).mount("#app");
+createApp(App).use(store).use(router).use(library).mount("#app");

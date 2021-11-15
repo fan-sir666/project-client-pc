@@ -1,4 +1,5 @@
 <template>
+  <!--  头部导航组件 -->
   <ul class="app-header-nav">
     <li class="home">
       <RouterLink to="/">首页</RouterLink>
@@ -6,13 +7,13 @@
     <li
       v-for="item in category.list"
       :key="item.id"
-      @mousemove="open(item.id)"
-      @mouseout="close(item.id)"
+      @mouseenter="open(item.id)"
+      @mouseleave="close(item.id)"
       @click="open(item.id)"
     >
       <router-link :to="`/category/${item.id}`">{{ item.name }}</router-link>
       <div class="layer" :class="{ open: item.open }">
-        <ul>
+        <ul v-if="item.children?.length">
           <li v-for="itemChildren in item.children" :key="itemChildren.id">
             <router-link :to="`/category/sub/${itemChildren.id}`">
               <img :src="itemChildren.picture" alt="" />
@@ -20,6 +21,14 @@
             </router-link>
           </li>
         </ul>
+        <template v-else>
+          <XtxSkeleton
+            animated="fade"
+            width="800px"
+            height="130px"
+            bg="rgba(0,0,0,0.5)"
+          ></XtxSkeleton>
+        </template>
       </div>
     </li>
   </ul>
@@ -33,8 +42,12 @@ export default {
   setup() {
     const store = useStore();
     const category = store.state.category;
-    const open = (id) => store.commit("category/open", id);
-    const close = (id) => store.commit("category/close", id);
+    const open = (id) => {
+      store.commit("category/open", id);
+    };
+    const close = (id) => {
+      store.commit("category/close", id);
+    };
     return { category, open, close };
   },
 };
