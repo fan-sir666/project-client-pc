@@ -1,3 +1,4 @@
+<!-- 轮播图组件 -->
 <template>
   <div class="xtx-carousel" @mouseenter="stop" @mouseleave="start">
     <ul class="carousel-body">

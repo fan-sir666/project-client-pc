@@ -1,6 +1,7 @@
 import XtxSkeleton from "@/components/library/XtxSkeleton";
 import XtxCarousel from "@/components/library/XtxCarousel";
 import XtxMore from "@/components/library/XtxMore";
+import lazy from "@/components/directive/lazy";
 
 export default {
   // 注册应用级全局组件
@@ -11,5 +12,7 @@ export default {
     app.component(XtxCarousel.name, XtxCarousel);
     // 查看更多组件
     app.component(XtxMore.name, XtxMore);
+    //  图片懒加载指令
+    app.directive("lazy", lazy);
   },
 };

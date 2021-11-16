@@ -1,5 +1,6 @@
+<!-- 新鲜好物页面组件 -->
 <template>
-  <HomePanel title="新鲜好物" subTitle="新鲜出炉 品质靠谱">
+  <HomePanel title="新鲜好物" subTitle="新鲜出炉 品质靠谱" ref="target">
     <template v-slot:right>
       <XtxMore />
     </template>
@@ -13,35 +14,26 @@
           </RouterLink>
         </li>
       </ul>
+      <Transition name="fade">
+        <HomeSkeleton v-if="!goods"></HomeSkeleton>
+      </Transition>
     </template>
   </HomePanel>
 </template>
 <script>
 import HomePanel from "@/views/home/components/HomePanel";
-import { ref } from "vue";
+import HomeSkeleton from "@/views/home/components/HomeSkeleton";
 import { getNewGoods } from "@/api/home";
+import useLazyData from "@/hooks/useLazyData";
 export default {
   name: "HomeNew",
   setup() {
-    const { goods, getData } = useNewGoods();
-    getData();
-    return { goods };
+    // 调用懒加载数据方法
+    const { target, result: goods } = useLazyData(getNewGoods);
+    return { goods, target };
   },
-  components: { HomePanel },
+  components: { HomePanel, HomeSkeleton },
 };
-function useNewGoods() {
-  const goods = ref();
-  const getData = async () => {
-    try {
-      const { result } = await getNewGoods();
-      // console.log(result);
-      goods.value = result;
-    } catch (e) {
-      throw new Error(e);
-    }
-  };
-  return { goods, getData };
-}
 </script>
 <style scoped lang="less">
 .goods-list {
@@ -66,5 +58,8 @@ function useNewGoods() {
       color: @priceColor;
     }
   }
+}
+.home-skeleton {
+  top: 115px;
 }
 </style>

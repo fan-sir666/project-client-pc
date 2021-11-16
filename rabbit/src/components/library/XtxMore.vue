@@ -1,3 +1,4 @@
+<!-- 查看更多组件 -->
 <template>
   <RouterLink :to="path" class="xtx-more">
     <span>查看全部</span>

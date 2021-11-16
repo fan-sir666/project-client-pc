@@ -1,3 +1,4 @@
+<!-- 骨架屏组件 -->
 <template>
   <div class="xtx-skeleton" :style="{ width, height }" :class="animated">
     <!-- 1 盒子-->

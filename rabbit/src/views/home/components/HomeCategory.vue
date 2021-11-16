@@ -92,7 +92,7 @@ function useHomeCategory() {
     brands: [],
   });
   // 获取品牌数据
-  getHotBrands(6).then(({ result }) => {
+  getHotBrands().then(({ result }) => {
     brand.value.brands = result;
   });
   // 获取分类数据并处理数据

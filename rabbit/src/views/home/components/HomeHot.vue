@@ -1,5 +1,6 @@
+<!-- 人气推荐页面组件 -->
 <template>
-  <HomePanel title="人气推荐" sub-title="人气爆款 不容错过">
+  <HomePanel title="人气推荐" sub-title="人气爆款 不容错过" ref="target">
     <template #default>
       <ul class="goods-list" v-if="goods">
         <li v-for="item in goods" :key="item.id">
@@ -10,36 +11,26 @@
           </RouterLink>
         </li>
       </ul>
+      <Transition name="fade">
+        <HomeSkeleton v-if="!goods"></HomeSkeleton>
+      </Transition>
     </template>
   </HomePanel>
 </template>
 
 <script>
 import HomePanel from "@/views/home/components/HomePanel";
-import { ref } from "vue";
+import HomeSkeleton from "@/views/home/components/HomeSkeleton";
 import { getHomeHot } from "@/api/home";
+import useLazyData from "@/hooks/useLazyData";
 export default {
   name: "HomeHot",
   setup() {
-    const { goods, getData } = useHotGoods();
-    getData();
-    return { goods };
+    const { target, result: goods } = useLazyData(getHomeHot);
+    return { goods, target };
   },
-  components: { HomePanel },
+  components: { HomePanel, HomeSkeleton },
 };
-function useHotGoods() {
-  const goods = ref();
-  const getData = async () => {
-    try {
-      const { result } = await getHomeHot();
-      // console.log(result);
-      goods.value = result;
-    } catch (e) {
-      throw new Error(e);
-    }
-  };
-  return { goods, getData };
-}
 </script>
 <style scoped lang="less">
 .goods-list {
@@ -64,5 +55,8 @@ function useHotGoods() {
       font-size: 18px;
     }
   }
+}
+.home-skeleton {
+  top: 115px;
 }
 </style>

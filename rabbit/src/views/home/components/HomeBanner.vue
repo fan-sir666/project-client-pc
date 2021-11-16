@@ -1,3 +1,4 @@
+<!-- 轮播图布局组件 -->
 <template>
   <div class="home-banner">
     <XtxCarousel v-if="banners" :carousel="banners" :autoplay="true" />

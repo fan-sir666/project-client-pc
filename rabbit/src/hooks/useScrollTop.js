@@ -1,5 +1,6 @@
 import { onMounted, onUnmounted, ref } from "vue";
 
+// 吸顶导航获取滚动距离函数
 export default function useScrollTop() {
   // 滚动距离
   const scrollTop = ref(0);

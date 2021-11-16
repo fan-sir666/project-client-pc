@@ -4,17 +4,17 @@ const routes = [
   // 首页
   {
     path: "/",
-    component: import("@/views/home/HomePage"),
+    component: () => import("@/views/home/HomePage"),
   },
-  // 首页
+  // 一级分类
   {
     path: "/category/:id",
-    component: import("@/views/category/TopCategoryPage"),
+    component: () => import("@/views/category/TopCategoryPage"),
   },
-  // 首页
+  // 二级分类
   {
     path: "/category/sub/:id",
-    component: import("@/views/category/SubcategoryPage"),
+    component: () => import("@/views/category/SubcategoryPage"),
   },
 ];
 
