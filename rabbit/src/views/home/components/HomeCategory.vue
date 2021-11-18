@@ -1,5 +1,5 @@
+<!--  左侧分类 -->
 <template>
-  <!--  左侧分类 -->
   <div class="home-category" @mouseleave="current = null">
     <ul class="menu">
       <li

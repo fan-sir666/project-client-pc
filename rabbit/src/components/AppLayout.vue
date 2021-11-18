@@ -1,5 +1,5 @@
+<!--  布局组件 -->
 <template>
-  <!--  布局组件 -->
   <AppTopNav></AppTopNav>
   <AppHeader></AppHeader>
   <AppHeaderSticky></AppHeaderSticky>

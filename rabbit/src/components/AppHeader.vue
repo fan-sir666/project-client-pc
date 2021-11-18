@@ -1,5 +1,5 @@
+<!--  页面头部组件 -->
 <template>
-  <!--  页面头部组件 -->
   <header class="app-header">
     <div class="container">
       <h1 class="logo"><router-link to="/"></router-link></h1>

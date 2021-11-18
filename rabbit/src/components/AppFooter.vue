@@ -1,5 +1,5 @@
+<!-- 页面底部组件 -->
 <template>
-  <!-- 页面底部组件 -->
   <footer class="app-footer">
     <!-- 联系我们 -->
     <div class="contact">

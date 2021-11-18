@@ -5,8 +5,7 @@
   </div>
 </template>
 <script>
-import { ref } from "vue";
-import { getBanners } from "@/api/home";
+import useBanners from "@/hooks/useBanners";
 
 export default {
   name: "HomeBanner",
@@ -16,20 +15,6 @@ export default {
     return { banners };
   },
 };
-function useBanners() {
-  const banners = ref(null);
-  //  获取轮播图数据
-  const getData = async () => {
-    try {
-      const { result } = await getBanners();
-      // console.log(result);
-      banners.value = result;
-    } catch (e) {
-      throw new Error(e);
-    }
-  };
-  return { banners, getData };
-}
 </script>
 <style scoped lang="less">
 .home-banner {

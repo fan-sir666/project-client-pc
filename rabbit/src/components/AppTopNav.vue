@@ -1,5 +1,5 @@
+<!--  顶部导航行 -->
 <template>
-  <!--  顶部导航行 -->
   <nav class="app-top-nav">
     <div class="container">
       <ul>
