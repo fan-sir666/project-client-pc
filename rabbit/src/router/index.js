@@ -20,6 +20,8 @@ const routes = [
 
 const router = createRouter({
   history: createWebHashHistory(),
+  // 路由切换页面自动回到顶部
+  scrollBehavior: () => ({ top: 0 }),
   routes,
 });
 

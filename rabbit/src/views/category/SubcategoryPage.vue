@@ -14,21 +14,30 @@
           }}</XtxBreadItem>
         </Transition>
       </XtxBread>
+      <SubFilter @onFilterChanged="handleChange"></SubFilter>
+      <XtxCheckbox v-model="test"></XtxCheckbox>
     </div>
   </AppLayout>
 </template>
 
 <script>
 import AppLayout from "@/components/AppLayout";
+import SubFilter from "@/views/category/components/SubFilter";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
-import { computed } from "vue";
+import { computed, ref } from "vue";
+import XtxCheckbox from "@/components/library/XtxCheckbox";
 export default {
   name: "SubCategoryPage",
   setup() {
-    return { result: useBread() };
+    const test = ref(false);
+    // 接收筛选条件
+    const handleChange = (obj) => {
+      console.log(obj);
+    };
+    return { result: useBread(), handleChange, test };
   },
-  components: { AppLayout },
+  components: { XtxCheckbox, AppLayout, SubFilter },
 };
 function useBread() {
   const store = useStore();

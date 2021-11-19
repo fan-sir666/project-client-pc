@@ -13,6 +13,11 @@
         :autoplay="true"
         :style="{ height: '500px' }"
       ></XtxCarousel>
+      <ShowSubCategoryList
+        v-if="result"
+        :subCategories="result.children"
+      ></ShowSubCategoryList>
+      <RecommendGoods></RecommendGoods>
     </div>
   </AppLayout>
 </template>
@@ -23,6 +28,8 @@ import { useStore } from "vuex";
 import { useRoute } from "vue-router";
 import { computed } from "vue";
 import useBanners from "@/hooks/useBanners";
+import ShowSubCategoryList from "@/views/category/components/ShowSubCategoryList";
+import RecommendGoods from "@/views/category/components/RecommendGoods";
 export default {
   name: "TopCategoryPage",
   setup() {
@@ -31,7 +38,7 @@ export default {
     getData(2);
     return { result: useBread(), banners };
   },
-  components: { AppLayout },
+  components: { ShowSubCategoryList, AppLayout, RecommendGoods },
 };
 // 获取面包屑数据
 function useBread() {
