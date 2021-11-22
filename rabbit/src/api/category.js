@@ -24,3 +24,7 @@ export function getTopCategoryById(id) {
 export function getSubCategoryFilterById(id) {
   return requestWithoutToken("/category/sub/filter", "get", { id });
 }
+
+export function getGoodsList(params) {
+  return requestWithoutToken("/category/goods", "post", params);
+}
