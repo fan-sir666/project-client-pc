@@ -1,6 +1,6 @@
 <!-- 一级分类商品推荐详情 -->
 <template>
-  <RouterLink to="/" class="goods-item">
+  <RouterLink :to="`/goods/${goodsItem.id}`" class="goods-item">
     <img :src="goodsItem.picture" alt="" />
     <p class="name ellipsis">{{ goodsItem.name }}</p>
     <p class="desc ellipsis">{{ goodsItem.desc }}}</p>

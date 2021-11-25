@@ -16,6 +16,11 @@ const routes = [
     path: "/category/sub/:id",
     component: () => import("@/views/category/SubcategoryPage"),
   },
+  // 商品详情
+  {
+    path: "/goods/:id",
+    component: () => import("@/views/goods/GoodsDetailPage"),
+  },
 ];
 
 const router = createRouter({
