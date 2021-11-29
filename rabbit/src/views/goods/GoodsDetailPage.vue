@@ -21,9 +21,15 @@
             <GoodsImages :images="result.mainPictures" />
             <GoodsSales></GoodsSales>
           </div>
-          <!-- 右侧 -->
+          <!-- 右侧 1369155864430120962-->
           <div class="spec">
             <GoodsInfo :goods="result"></GoodsInfo>
+            <GoodsSku
+              skuId="1369155872197971970"
+              :skus="result.skus"
+              :specs="result.specs"
+              @sendChangeData="sendChangeData"
+            ></GoodsSku>
           </div>
         </div>
         <!-- 商品推荐 -->
@@ -49,6 +55,7 @@ import GoodsRelevant from "@/views/goods/components/GoodsRelevant";
 import GoodsImages from "@/views/goods/components/GoodsImages";
 import GoodsSales from "@/views/goods/components/GoodsSales";
 import GoodsInfo from "@/views/goods/components/GoodsInfo";
+import GoodsSku from "@/views/goods/components/GoodsSku";
 import AppLayout from "@/components/AppLayout";
 import { onBeforeRouteUpdate, useRoute } from "vue-router";
 import { ref } from "vue";
@@ -58,9 +65,22 @@ export default {
   setup() {
     const { result, getData } = useGoods();
     getData();
-    return { result };
+    // 更新基本信息
+    const sendChangeData = (data) => {
+      result.value.price = data.price;
+      result.value.oldPrice = data.oldPrice;
+      result.value.inventory = data.inventory;
+    };
+    return { result, sendChangeData };
   },
-  components: { GoodsRelevant, AppLayout, GoodsImages, GoodsSales, GoodsInfo },
+  components: {
+    GoodsRelevant,
+    AppLayout,
+    GoodsImages,
+    GoodsSales,
+    GoodsInfo,
+    GoodsSku,
+  },
 };
 function useGoods() {
   const route = useRoute();

@@ -13,7 +13,7 @@
     </dl>
     <dl>
       <dt>配送</dt>
-      <dd>至<XtxCity /></dd>
+      <dd>至<XtxCity @onCityChanged="onCityChanged" /></dd>
     </dl>
     <dl>
       <dt>服务</dt>
@@ -35,6 +35,12 @@ export default {
       type: Object,
       default: () => ({}),
     },
+  },
+  setup() {
+    const onCityChanged = (data) => {
+      console.log(data);
+    };
+    return { onCityChanged };
   },
 };
 </script>
