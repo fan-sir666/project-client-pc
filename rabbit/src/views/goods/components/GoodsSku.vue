@@ -1,3 +1,4 @@
+<!-- 规格选择组件 -->
 <template>
   <div class="goods-sku">
     <dl v-for="item in specs" :key="item.name">

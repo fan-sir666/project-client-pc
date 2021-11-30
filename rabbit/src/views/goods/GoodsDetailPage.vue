@@ -25,25 +25,36 @@
           <div class="spec">
             <GoodsInfo :goods="result"></GoodsInfo>
             <GoodsSku
-              skuId="1369155872197971970"
               :skus="result.skus"
               :specs="result.specs"
               @sendChangeData="sendChangeData"
             ></GoodsSku>
+            <XtxNumberBox
+              label="数量"
+              :max="result.inventory"
+              v-model="goodsCount"
+            ></XtxNumberBox>
+            <XtxButton type="primary" :style="{ 'margin-top': '20px' }"
+              >加入购物车</XtxButton
+            >
           </div>
         </div>
         <!-- 商品推荐 -->
-        <GoodsRelevant></GoodsRelevant>
+        <GoodsRelevant :goodsId="result.id"></GoodsRelevant>
         <!-- 商品详情 -->
         <div class="goods-footer">
           <div class="goods-article">
             <!-- 商品+评价 -->
-            <div class="goods-tabs"></div>
+            <GoodsTab></GoodsTab>
             <!-- 注意事项 -->
-            <div class="goods-warn"></div>
+            <GoodsWarn></GoodsWarn>
           </div>
           <!-- 24热榜 -->
-          <div class="goods-aside"></div>
+          <div class="goods-aside">
+            <GoodsHot :type="1"></GoodsHot>
+            <GoodsHot :type="2"></GoodsHot>
+            <GoodsHot :type="3"></GoodsHot>
+          </div>
         </div>
       </div>
     </div>
@@ -51,18 +62,22 @@
 </template>
 
 <script>
+import GoodsWarn from "@/views/goods/components/GoodsWarn";
 import GoodsRelevant from "@/views/goods/components/GoodsRelevant";
+import GoodsHot from "@/views/goods/components/GoodsHot";
+import GoodsTab from "@/views/goods/components/GoodsTab";
 import GoodsImages from "@/views/goods/components/GoodsImages";
 import GoodsSales from "@/views/goods/components/GoodsSales";
 import GoodsInfo from "@/views/goods/components/GoodsInfo";
 import GoodsSku from "@/views/goods/components/GoodsSku";
 import AppLayout from "@/components/AppLayout";
 import { onBeforeRouteUpdate, useRoute } from "vue-router";
-import { ref } from "vue";
+import { provide, ref } from "vue";
 import { getGoodsDetailById } from "@/api/goods";
 export default {
   name: "GoodsDetailPage",
   setup() {
+    const goodsCount = ref(1);
     const { result, getData } = useGoods();
     getData();
     // 更新基本信息
@@ -71,7 +86,8 @@ export default {
       result.value.oldPrice = data.oldPrice;
       result.value.inventory = data.inventory;
     };
-    return { result, sendChangeData };
+    provide("goodsDetailData", result);
+    return { result, sendChangeData, goodsCount };
   },
   components: {
     GoodsRelevant,
@@ -80,6 +96,9 @@ export default {
     GoodsSales,
     GoodsInfo,
     GoodsSku,
+    GoodsTab,
+    GoodsHot,
+    GoodsWarn,
   },
 };
 function useGoods() {
