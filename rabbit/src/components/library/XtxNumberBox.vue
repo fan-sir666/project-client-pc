@@ -39,6 +39,7 @@ export default {
         curNumber.value = 1;
       } else if (changeNumber > props.max) {
         curNumber.value = props.max;
+        alert("抱歉库存仅剩这些了");
       } else {
         curNumber.value = changeNumber;
       }

@@ -3,7 +3,7 @@
   <RouterLink :to="`/goods/${goodsItem.id}`" class="goods-item">
     <img :src="goodsItem.picture" alt="" />
     <p class="name ellipsis">{{ goodsItem.name }}</p>
-    <p class="desc ellipsis">{{ goodsItem.desc }}}</p>
+    <p class="desc ellipsis">{{ goodsItem.desc }}</p>
     <p class="price">&yen;{{ goodsItem.price }}</p>
   </RouterLink>
 </template>
