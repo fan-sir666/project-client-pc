@@ -1,4 +1,7 @@
+// 指令
 import lazy from "@/components/directive/lazy";
+// 设置全局属性
+import Message from "@/components/library/Message";
 // 批量注册组件
 const importFn = require.context("./", false, /\.vue$/);
 const keys = importFn.keys();
@@ -14,5 +17,7 @@ export default {
     });
     //  图片懒加载指令
     app.directive("lazy", lazy);
+    //  提示框
+    app.config.globalProperties.$message = Message;
   },
 };

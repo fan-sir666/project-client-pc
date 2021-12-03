@@ -84,11 +84,13 @@
       </div>
     </div>
     <!-- 分页组件   -->
+    <!-- 注意：数据双向绑定watch监听不到当前页的变化，自己调用更新请求参数的方法 或深度监听   -->
     <XtxPagination
       v-if="commentList?.pages > 1"
       v-model:page="reqParams.page"
       :pageSize="reqParams.pageSize"
       :totalCount="commentList.counts"
+      @update:page="updateReqParams({ page: $event })"
     ></XtxPagination>
   </div>
 </template>
@@ -172,13 +174,19 @@ function useCommentList() {
         tag:
           params.tag === "有图" || params.tag === "全部评价" ? "" : params.tag,
       };
+      reqParams.value.page = 1;
+    } else if (params.sortField) {
+      reqParams.value = {
+        ...reqParams.value,
+        ...params,
+      };
+      reqParams.value.page = 1;
     } else {
       reqParams.value = {
         ...reqParams.value,
         ...params,
       };
     }
-    reqParams.value.page = 1;
   };
   const getData = async () => {
     const { result } = await getCommentListApi(reqParams.value);
@@ -190,7 +198,7 @@ function useCommentList() {
     () => {
       getData();
     },
-    { immediate: true }
+    { immediate: true, deep: true }
   );
   // 格式化用户昵称
   const formatNickname = (nickname) => {

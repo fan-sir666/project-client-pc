@@ -21,6 +21,10 @@ const routes = [
     path: "/goods/:id",
     component: () => import("@/views/goods/GoodsDetailPage"),
   },
+  {
+    path: "/login",
+    component: () => import("@/views/login/LoginPage"),
+  },
 ];
 
 const router = createRouter({
