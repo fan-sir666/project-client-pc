@@ -21,9 +21,15 @@ const routes = [
     path: "/goods/:id",
     component: () => import("@/views/goods/GoodsDetailPage"),
   },
+  // 登录
   {
     path: "/login",
     component: () => import("@/views/login/LoginPage"),
+  },
+  // 快捷登录
+  {
+    path: "/login/callback",
+    component: () => import("@/views/login/LoginCallbackPage"),
   },
 ];
 

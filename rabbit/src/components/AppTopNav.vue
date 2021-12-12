@@ -6,10 +6,10 @@
         <template v-if="user.profile.token">
           <li>
             <a href="javascript:">
-              <i class="iconfont icon-user">周杰伦</i>
+              <i class="iconfont icon-user">{{ user.profile.account }}</i>
             </a>
           </li>
-          <li><a href="javascript:">退出登录</a></li>
+          <li><a href="javascript:" @click="logout">退出登录</a></li>
         </template>
         <template v-else>
           <li><router-link to="/login">请先登录</router-link></li>
@@ -31,15 +31,22 @@
 
 <script>
 import { useStore } from "vuex";
+import { useRouter } from "vue-router";
 
 export default {
   name: "AppTopNav",
   setup() {
     const store = useStore();
+    const router = useRouter();
     // 注意: 在取vuex的状态时,取到模块一级 数据是响应式的
     // 在取到具体的值时,我们通过计算属性的方式返回响应式数据
     const user = store.state.user;
-    return { user };
+    // 退出登录
+    const logout = () => {
+      store.commit("user/setUser", {});
+      router.push("/login");
+    };
+    return { user, logout };
   },
 };
 </script>

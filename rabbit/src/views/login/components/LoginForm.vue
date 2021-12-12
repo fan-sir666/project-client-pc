@@ -62,13 +62,7 @@
               <i className="iconfont icon-warning"></i>{{ accountIsAgreeError }}
             </div>
           </div>
-          <button
-            type="submit"
-            className="btn"
-            @click="$message({ type: 'success', text: '测试' })"
-          >
-            登录
-          </button>
+          <button type="submit" className="btn">登录</button>
         </form>
       </template>
       <!-- 短信登录 -->
@@ -95,7 +89,9 @@
                 placeholder="请输入验证码"
                 v-model="codeField"
               />
-              <span className="code">发送验证码</span>
+              <span className="code" @click="getMsgCode">{{
+                isActive ? `剩余${count}秒` : "发送验证码"
+              }}</span>
             </div>
             <div className="error" v-if="codeError">
               <i className="iconfont icon-warning"></i>{{ codeError }}
@@ -113,21 +109,18 @@
               <i className="iconfont icon-warning"></i>{{ mobileIsAgreeError }}
             </div>
           </div>
-          <button
-            type="submit"
-            className="btn"
-            @click="$message({ type: 'success', text: '测试' })"
-          >
-            登录
-          </button>
+          <button type="submit" className="btn">登录</button>
         </form>
       </template>
     </div>
     <div className="action">
-      <img
-        src="https://qzonestyle.gtimg.cn/qzone/vas/opensns/res/img/Connect_logo_7.png"
-        alt=""
-      />
+      <a
+        href="https://graph.qq.com/oauth2.0/authorize?client_id=100556005&response_type=token&scope=all&redirect_uri=http%3A%2F%2Fwww.corho.com%3A8080%2F%23%2Flogin%2Fcallback"
+      >
+        <img
+          src="https://qzonestyle.gtimg.cn/qzone/vas/opensns/res/img/Connect_logo_7.png"
+        />
+      </a>
       <div className="url">
         <a href="javascript:">忘记密码</a>
         <a href="javascript:">免费注册</a>
@@ -145,31 +138,69 @@ import {
   mobile,
   code,
 } from "@/utils/vee-validate-schema";
+import {
+  getLoginMsgCode,
+  userByAccountLogin,
+  userByMobileLogin,
+} from "@/api/user";
+import useLoginAfter from "@/hooks/useLoginAfter";
+import Message from "@/components/library/Message";
+import useCountDown from "@/hooks/useCountDown";
 
 export default {
   name: "LoginForm",
   setup() {
     // 是否显示短信登录
     const isMsgLogin = ref(false);
+    // 获取登录成功和失败的回调函数
+    const { loginSuccess, loginFailed } = useLoginAfter();
     // 账号登录表单验证
     const {
       accountFormHandleSubmit,
       accountFormHandleReset,
       ...accountFormValid
     } = useAccountFormValidate();
-    const onAccountFormSubmit = accountFormHandleSubmit((values) => {
-      console.log(values);
-    });
+    // 用户名和密码表单提交
+    const onAccountFormSubmit = accountFormHandleSubmit(
+      ({ account, password }) => {
+        // console.log({ account, password });
+        userByAccountLogin({ account, password })
+          .then(loginSuccess)
+          .catch(loginFailed);
+      }
+    );
     // 手机号表单登录验证
     const {
       mobileFormHandleSubmit,
       mobileFormHandleReset,
+      mobileIsValidate,
       ...mobileFormValid
     } = useMobileFormValidate();
-    const onMobileFormSubmit = mobileFormHandleSubmit((values) => {
-      console.log(values);
+    // 手机号验证码提交
+    const onMobileFormSubmit = mobileFormHandleSubmit(({ mobile, code }) => {
+      // console.log(values);
+      userByMobileLogin({ mobile, code }).then(loginSuccess).catch(loginFailed);
     });
-
+    // 获取倒计时属性和方法
+    const { count, isActive, start } = useCountDown();
+    // 获取手机验证码
+    const getMsgCode = async () => {
+      // 单独校验手机号
+      let { isValid, mobile } = await mobileIsValidate();
+      // console.log(isValid, mobile);
+      // 手机号正确 倒计时未开启
+      if (isValid && !isActive.value) {
+        try {
+          // 获取验证码
+          await getLoginMsgCode(mobile);
+          Message({ type: "success", text: "验证码发送成功" });
+          //  倒计时
+          start(60);
+        } catch (err) {
+          Message({ type: "error", text: "验证码发送失败" });
+        }
+      }
+    };
     return {
       isMsgLogin,
       onAccountFormSubmit,
@@ -178,6 +209,9 @@ export default {
       onMobileFormSubmit,
       mobileFormHandleReset,
       ...mobileFormValid,
+      getMsgCode,
+      count,
+      isActive,
     };
   },
 };
@@ -225,10 +259,20 @@ function useMobileFormValidate() {
       isAgree,
     },
   });
-  const { value: mobileField, errorMessage: mobileError } = useField("mobile");
+  const {
+    value: mobileField,
+    errorMessage: mobileError,
+    validate: mobileValidate,
+  } = useField("mobile");
   const { value: codeField, errorMessage: codeError } = useField("code");
   const { value: mobileIsAgreeField, errorMessage: mobileIsAgreeError } =
     useField("isAgree");
+
+  // 单独验证是否输入手机号
+  const mobileIsValidate = async () => {
+    let { valid } = await mobileValidate();
+    return { isValid: valid, mobile: mobileField.value };
+  };
   return {
     mobileField,
     mobileError,
@@ -238,6 +282,7 @@ function useMobileFormValidate() {
     mobileIsAgreeError,
     mobileFormHandleSubmit,
     mobileFormHandleReset,
+    mobileIsValidate,
   };
 }
 </script>
@@ -246,29 +291,23 @@ function useMobileFormValidate() {
   .toggle {
     padding: 15px 40px;
     text-align: right;
-
     button {
       color: @xtxColor;
       background: none;
       border: none;
       cursor: pointer;
-
       i {
         font-size: 14px;
       }
     }
   }
-
   .form {
     padding: 0 40px;
-
     &-item {
       margin-bottom: 28px;
-
       .input {
         position: relative;
         height: 36px;
-
         > i {
           width: 34px;
           height: 34px;
@@ -281,24 +320,20 @@ function useMobileFormValidate() {
           line-height: 34px;
           font-size: 18px;
         }
-
         input {
           padding-left: 44px;
           border: 1px solid #cfcdcd;
           height: 36px;
           line-height: 36px;
           width: 100%;
-
           &.error {
             border-color: @priceColor;
           }
-
           &.active,
           &:focus {
             border-color: @xtxColor;
           }
         }
-
         .code {
           position: absolute;
           right: 1px;
@@ -312,31 +347,26 @@ function useMobileFormValidate() {
           height: 34px;
           cursor: pointer;
         }
-
         .code.disabled {
           cursor: wait;
         }
       }
-
       > .error {
         position: absolute;
         font-size: 12px;
         line-height: 28px;
         color: @priceColor;
-
         i {
           font-size: 14px;
           margin-right: 2px;
         }
       }
     }
-
     .agree {
       a {
         color: #069;
       }
     }
-
     .btn {
       display: block;
       width: 100%;
@@ -346,19 +376,16 @@ function useMobileFormValidate() {
       line-height: 40px;
       background: @xtxColor;
       border: none;
-
       &.disabled {
         background: #cfcdcd;
       }
     }
   }
-
   .action {
     padding: 20px 40px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-
     .url {
       a {
         color: #999;
