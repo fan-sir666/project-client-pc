@@ -164,6 +164,8 @@ function sendDataToParent(specs, pathMap, skus, emit) {
         .map((item) => `${item.name}:${item.valueName}`)
         .join(" "),
     });
+  } else {
+    emit("sendClearSkuId");
   }
 }
 </script>
