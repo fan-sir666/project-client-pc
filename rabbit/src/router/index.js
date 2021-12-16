@@ -31,6 +31,11 @@ const routes = [
     path: "/login/callback",
     component: () => import("@/views/login/LoginCallbackPage"),
   },
+  //  购物车
+  {
+    path: "/cart",
+    component: () => import("@/views/cart/cartPage"),
+  },
 ];
 
 const router = createRouter({

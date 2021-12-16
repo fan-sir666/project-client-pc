@@ -35,7 +35,7 @@ function useRelativeGoods(goodsId) {
   // 存放处理好的轮播图数据
   const carousels = ref([]);
   const getData = async () => {
-    const { result } = await getRelevantGoods(goodsId);
+    const { result } = await getRelevantGoods({ id: goodsId });
     //  处理数据
     const size = 4;
     const total = Math.ceil(result.length / size);
