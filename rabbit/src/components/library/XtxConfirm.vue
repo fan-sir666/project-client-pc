@@ -3,15 +3,23 @@
     <div class="wrapper">
       <div class="header">
         <h3>{{ title }}</h3>
-        <a href="JavaScript:" class="iconfont icon-close-new"></a>
+        <a
+          href="JavaScript:"
+          class="iconfont icon-close-new"
+          @click="onCancelButtonClick"
+        ></a>
       </div>
       <div class="body">
         <i class="iconfont icon-warning"></i>
         <span>{{ content }}</span>
       </div>
       <div class="footer">
-        <XtxButton size="mini" type="gray">取消</XtxButton>
-        <XtxButton size="mini" type="primary">确认</XtxButton>
+        <XtxButton size="mini" type="gray" @click="onCancelButtonClick"
+          >取消</XtxButton
+        >
+        <XtxButton size="mini" type="primary" @click="onSureButtonClick"
+          >确认</XtxButton
+        >
       </div>
     </div>
   </div>
@@ -29,6 +37,12 @@ export default {
       type: String,
       default: "",
     },
+    onSureButtonClick: {
+      type: Function,
+    },
+    onCancelButtonClick: {
+      type: Function,
+    },
   },
   components: { XtxButton },
 };
@@ -41,7 +55,8 @@ export default {
   width: 100%;
   height: 100%;
   z-index: 8888;
-  background: rgba(0, 0, 0, 0.5);
+  //background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0);
   transition: all 0.4s;
   &.fade {
     background: rgba(0, 0, 0, 0.5);
@@ -53,7 +68,9 @@ export default {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    //transform: translate(-50%, -50%);
+    transform: translate(-50%, -60%);
+    opacity: 0;
     transition: all 0.4s;
     &.fade {
       transform: translate(-50%, -50%);

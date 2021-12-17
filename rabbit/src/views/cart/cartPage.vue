@@ -144,6 +144,8 @@ import GoodsRelevant from "@/views/goods/components/GoodsRelevant";
 import AppLayout from "@/components/AppLayout";
 import { computed } from "vue";
 import { useStore } from "vuex";
+import Confirm from "@/components/library/Confirm";
+import Message from "@/components/library/Message";
 export default {
   name: "CartPage",
   setup() {
@@ -182,9 +184,29 @@ export default {
     const selectAllGoods = (isAllSelected) => {
       store.dispatch("cart/goodsAllselected", isAllSelected);
     };
-    // 删除商品
+    // 删除商品skuId
     const delGoods = (skuId) => {
-      store.dispatch("cart/delGoodsofCart", skuId);
+      // Confirm({
+      //   content: "您确定要删除该商品吗?",
+      //   onSureButtonClick: () => {
+      //     store.dispatch("cart/delGoodsofCart", skuId);
+      //     Message({ type: "success", text: "删除成功" });
+      //   },
+      //   onCancelButtonClick: () => {
+      //     Message({ type: "warn", text: "已取消删除" });
+      //   },
+      // });
+      //  升级Confirm方法后使用.then.catch
+      Confirm({
+        content: "您确定要删除该商品吗?",
+      })
+        .then(() => {
+          store.dispatch("cart/delGoodsofCart", skuId);
+          Message({ type: "success", text: "删除成功" });
+        })
+        .catch(() => {
+          Message({ type: "warn", text: "已取消删除" });
+        });
     };
     return {
       effectiveGoodsList,

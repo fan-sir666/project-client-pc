@@ -27,8 +27,8 @@ export default {
     delGoodsofCart(state, skuId) {
       state.list = state.list.filter((item) => item.skuId !== skuId);
     },
-    //  自动更新商品
-    autoupdateGoodsofCart(state, upGoods) {
+    //  更新商品
+    updateGoodsofCart(state, upGoods) {
       const index = state.list.findIndex(
         (item) => item.skuId === upGoods.skuId
       );
@@ -36,17 +36,6 @@ export default {
         ...state.list[index],
         ...upGoods,
       };
-    },
-    //  更新商品
-    updateGoodsofCart(state, goods) {
-      const index = state.list.findIndex((item) => item.skuId === goods.skuId);
-      state.list[index] = {
-        ...state.list[index],
-        ...goods,
-      };
-    },
-    goodsAllselected(state, payload) {
-      state.list.forEach((item) => (item.selected = payload));
     },
   },
   actions: {
@@ -82,7 +71,7 @@ export default {
           data.forEach((item, index) => {
             //  返回数据没有skuId我们给数据加上
             item.result.skuId = state.list[index].skuId;
-            commit("autoupdateGoodsofCart", item.result);
+            commit("updateGoodsofCart", item.result);
           });
         });
       }
@@ -97,12 +86,14 @@ export default {
       }
     },
     //  全选
-    goodsAllselected({ rootState, commit }, payload) {
+    goodsAllselected({ rootState, state, commit }, payload) {
       if (rootState.user.profile.token) {
         // 登录
       } else {
         // 未登录
-        commit("goodsAllselected", payload);
+        state.list.forEach((item) =>
+          commit("updateGoodsofCart", { skuId: item.skuId, selected: payload })
+        );
       }
     },
   },
