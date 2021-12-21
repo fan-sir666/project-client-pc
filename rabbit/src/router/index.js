@@ -1,4 +1,5 @@
 import { createRouter, createWebHashHistory } from "vue-router";
+import authGuard from "@/router/authGuard";
 
 const routes = [
   // 首页
@@ -36,6 +37,11 @@ const routes = [
     path: "/cart",
     component: () => import("@/views/cart/cartPage"),
   },
+  //  结算
+  {
+    path: "/checkout/order",
+    component: () => import("@/views/pay/CheckoutPage"),
+  },
 ];
 
 const router = createRouter({
@@ -44,5 +50,7 @@ const router = createRouter({
   scrollBehavior: () => ({ top: 0 }),
   routes,
 });
+// 检测用户是否登录
+router.beforeEach(authGuard);
 
 export default router;

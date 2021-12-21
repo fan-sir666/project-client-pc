@@ -11,6 +11,7 @@
 </template>
 <script>
 import { useVModel } from "@vueuse/core";
+import Message from "@/components/library/Message";
 
 export default {
   name: "XtxNumberBox",
@@ -39,7 +40,7 @@ export default {
         curNumber.value = 1;
       } else if (changeNumber > props.max) {
         curNumber.value = props.max;
-        alert("抱歉库存仅剩这些了");
+        Message({ type: "warn", text: "抱歉库存仅剩这些了" });
       } else {
         curNumber.value = changeNumber;
       }

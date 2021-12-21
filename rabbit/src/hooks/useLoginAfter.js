@@ -27,6 +27,16 @@ export default function useLoginAfter() {
     router.push("/").then(() => {
       Message({ type: "success", text: "登录成功" });
     });
+    //  合并购物车
+    store
+      .dispatch("cart/mergeGoodsCart")
+      .then(() => {
+        // 服务端购物车列表同步本地
+        return store.dispatch("cart/autoupdateGoodsofCart");
+      })
+      .catch((err) => {
+        throw new Error(err);
+      });
   };
   //  登录失败
   const loginFailed = (error) => {

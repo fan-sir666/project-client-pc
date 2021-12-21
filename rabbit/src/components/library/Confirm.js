@@ -9,11 +9,7 @@ export default function Confirm({ title = "温馨提示", content }) {
   return new Promise((resolve, reject) => {
     const onSureButtonClickHandler = () => {
       resolve();
-      vNode.el.classList.remove("fade");
-      vNode.el.children[0].classList.remove("fade");
-      setTimeout(() => {
-        render(null, container);
-      }, 400);
+      render(null, container);
     };
     const onCancelButtonClickHandler = () => {
       reject();

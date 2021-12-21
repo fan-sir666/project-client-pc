@@ -48,6 +48,10 @@
                         {{ item.name }}
                       </p>
                       <!-- 选择规格组件 -->
+                      <CartSku
+                        :attrsText="item.attrsText"
+                        :skuId="item.skuId"
+                      ></CartSku>
                     </div>
                   </div>
                 </td>
@@ -61,7 +65,16 @@
                   </p>
                 </td>
                 <td class="tc">
-                  <XtxNumberBox></XtxNumberBox>
+                  <XtxNumberBox
+                    :max="item.stock"
+                    :modelValue="item.count"
+                    @update:modelValue="
+                      $store.dispatch('cart/updateGoodsofCart', {
+                        skuId: item.skuId,
+                        count: $event,
+                      })
+                    "
+                  ></XtxNumberBox>
                 </td>
                 <td class="tc">
                   <p class="f16 red">
@@ -121,15 +134,25 @@
         <div class="action">
           <div class="batch">
             <XtxCheckbox>全选</XtxCheckbox>
-            <a href="javascript:">删除商品</a>
+            <a
+              href="javascript:"
+              @click="delGoodsSelectedOrInvalid('userSelectedGoodsList')"
+              >删除商品</a
+            >
             <a href="javascript:">移入收藏夹</a>
-            <a href="javascript:">清空失效商品</a>
+            <a
+              href="javascript:"
+              @click="delGoodsSelectedOrInvalid('invalidGoodsList')"
+              >清空失效商品</a
+            >
           </div>
           <div class="total">
             共 {{ effectiveGoodsCount }} 件商品，已选择
             {{ userSelectedGoodsCount }} 件，商品合计：
             <span class="red">¥{{ userSelectedGoodsPrice }}</span>
-            <XtxButton type="primary">下单结算</XtxButton>
+            <XtxButton type="primary" @click="jumpToCheckout"
+              >下单结算</XtxButton
+            >
           </div>
         </div>
         <!-- 猜你喜欢 -->
@@ -140,12 +163,14 @@
 </template>
 <script>
 import EmptyCart from "@/views/cart/components/EmptyCart";
+import CartSku from "@/views/cart/components/CartSku";
 import GoodsRelevant from "@/views/goods/components/GoodsRelevant";
 import AppLayout from "@/components/AppLayout";
 import { computed } from "vue";
 import { useStore } from "vuex";
 import Confirm from "@/components/library/Confirm";
 import Message from "@/components/library/Message";
+import router from "@/router";
 export default {
   name: "CartPage",
   setup() {
@@ -208,6 +233,33 @@ export default {
           Message({ type: "warn", text: "已取消删除" });
         });
     };
+    // 删除选中的商品、清空无效商品
+    const delGoodsSelectedOrInvalid = (flag) => {
+      //  提示框内容
+      let content = "";
+      if (flag === "userSelectedGoodsList") {
+        if (userSelectedGoodsCount.value === 0) {
+          return Message({ type: "warn", text: "至少选中一件商品" });
+        }
+        content = "您确定要删除选中的商品吗";
+      } else if (flag === "invalidGoodsList") {
+        if (invalidGoodsList.value.length === 0) {
+          return Message({ type: "warn", text: "没有无效商品" });
+        }
+        content = "您确定要删除无效商品吗";
+      }
+      Confirm({ content }).then(() => {
+        store.dispatch("cart/delSelectedOrInvalid", flag);
+      });
+    };
+
+    // 下单结算
+    const jumpToCheckout = () => {
+      if (userSelectedGoodsCount.value === 0)
+        return Message({ type: "warn", text: "至少有一件商品才可结算" });
+      // 跳转到结算页面
+      router.push("/checkout/order");
+    };
     return {
       effectiveGoodsList,
       effectiveGoodsCount,
@@ -218,9 +270,11 @@ export default {
       selectAllButtonStatus,
       selectAllGoods,
       delGoods,
+      delGoodsSelectedOrInvalid,
+      jumpToCheckout,
     };
-  }, //
-  components: { GoodsRelevant, AppLayout, EmptyCart },
+  },
+  components: { GoodsRelevant, AppLayout, EmptyCart, CartSku },
 };
 </script>
 <style scoped lang="less">
