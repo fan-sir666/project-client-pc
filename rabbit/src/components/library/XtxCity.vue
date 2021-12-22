@@ -85,7 +85,7 @@ export default {
       if (selectedCityData.countyCode) {
         // code码回传父组件
         const { provinceCode, cityCode, countyCode } = selectedCityData;
-        emit("onCityChanged", { provinceCode, cityCode, countyCode });
+        emit("onCityChanged", { provinceCode, cityCode, countyCode, location });
         // 隐藏弹框
         hide();
         //  重置初始列表
