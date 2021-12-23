@@ -1,11 +1,11 @@
 <!-- 收货地址组件-->
 <template>
-  <div class="address" v-if="finalAddress">
+  <div class="address">
     <div class="text">
       <div class="none" v-if="!finalAddress">
         您需要先添加收货地址才可提交订单。
       </div>
-      <ul>
+      <ul v-else>
         <li>
           <span>收<i />货<i />人：</span>{{ finalAddress.receiver }}
         </li>

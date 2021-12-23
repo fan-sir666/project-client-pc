@@ -42,6 +42,18 @@ const routes = [
     path: "/checkout/order",
     component: () => import("@/views/pay/CheckoutPage"),
   },
+  //  支付
+  { path: "/checkout/pay", component: () => import("@/views/pay/PayPage") },
+  // 支付结果
+  {
+    path: "/pay/callback",
+    component: () => import("@/views/pay/PayResultPage"),
+  },
+  //  个人中心首页
+  {
+    path: "/member/home",
+    component: () => import("@/views/member/home/MemberHomePage"),
+  },
 ];
 
 const router = createRouter({

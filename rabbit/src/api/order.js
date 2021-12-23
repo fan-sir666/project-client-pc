@@ -34,3 +34,21 @@ export function getAddressList() {
 export function modifyAddress({ id, address }) {
   return requestWithToken(`/member/address/${id}`, "put", address);
 }
+
+/**
+ * 提交订单
+ * @param order
+ * @returns {Promise}
+ */
+export function submitOrder(order) {
+  return requestWithToken("/member/order", "post", order);
+}
+
+/**
+ * 获取当前id的订单详情
+ * @param id
+ * @returns {Promise}
+ */
+export function getOrderInfo(id) {
+  return requestWithToken(`/member/order/${id}`, "get");
+}

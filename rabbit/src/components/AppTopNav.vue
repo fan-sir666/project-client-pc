@@ -5,9 +5,9 @@
       <ul>
         <template v-if="user.profile.token">
           <li>
-            <a href="javascript:">
+            <router-link to="/member/home">
               <i class="iconfont icon-user">{{ user.profile.account }}</i>
-            </a>
+            </router-link>
           </li>
           <li><a href="javascript:" @click="logout">退出登录</a></li>
         </template>
