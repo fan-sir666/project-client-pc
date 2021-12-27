@@ -54,6 +54,21 @@ const routes = [
     path: "/member/home",
     component: () => import("@/views/member/home/MemberHomePage"),
   },
+  //   个人中心列表
+  {
+    path: "/member/order",
+    component: () => import("@/views/member/order/OrderView"),
+    children: [
+      {
+        path: "",
+        component: () => import("@/views/member/order/OrderListPage"),
+      },
+      {
+        path: ":id",
+        component: () => import("@/views/member/order/OrderDetailPage"),
+      },
+    ],
+  },
 ];
 
 const router = createRouter({
@@ -61,6 +76,10 @@ const router = createRouter({
   // 路由切换页面自动回到顶部
   scrollBehavior: () => ({ top: 0 }),
   routes,
+  // 模糊匹配类名
+  linkActiveClass: "fuzzy-active",
+  // 精确匹配类名
+  linkExactActiveClass: "exact-active",
 });
 // 检测用户是否登录
 router.beforeEach(authGuard);
