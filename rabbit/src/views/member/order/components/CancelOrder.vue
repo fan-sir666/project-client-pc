@@ -1,3 +1,4 @@
+<!-- 取消订单 -->
 <template>
   <XtxDialog title="取消订单" v-model:visible="visible">
     <!-- 组件内容 -->

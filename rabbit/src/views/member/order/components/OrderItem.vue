@@ -39,7 +39,11 @@
       </div>
       <div class="column state">
         <p>{{ orderStatus[order.orderState].label }}</p>
-        <a href="javascript:" class="green" v-if="order.orderState === 3"
+        <a
+          href="javascript:"
+          class="green"
+          v-if="order.orderState === 3"
+          @click="lookLogistics(order.id)"
           >查看物流</a
         >
         <a href="javascript:" class="green" v-if="order.orderState === 4"
@@ -62,7 +66,11 @@
           @click="$router.push(`/member/pay?orderId=${order.id}`)"
           >立即付款</XtxButton
         >
-        <XtxButton type="primary" size="small" v-if="order.orderState === 3"
+        <XtxButton
+          type="primary"
+          size="small"
+          v-if="order.orderState === 3"
+          @click="onConfirmReceiptHandler(order.id)"
           >确认收货</XtxButton
         >
         <p>
@@ -89,7 +97,7 @@ import useCountDown from "@/hooks/useCountDown";
 import dayjs from "dayjs";
 import { orderStatus } from "@/api/canstants";
 import Confirm from "@/components/library/Confirm";
-import { deleteOrder } from "@/api/member";
+import { confirmReceiptGoods, deleteOrder } from "@/api/member";
 import Message from "@/components/library/Message";
 
 export default {
@@ -118,12 +126,30 @@ export default {
         .then(() => Message({ type: "success", text: "订单删除成功" }))
         .then(() => emit("onReloadOrderList"));
     };
+    // 确认收货
+    const onConfirmReceiptHandler = async (id) => {
+      try {
+        await Confirm({ content: "确定要进行收货吗" });
+        await confirmReceiptGoods(id);
+        Message({ type: "success", text: "确认收货成功" });
+        // 重新获取订单列表
+        emit("onReloadOrderList");
+      } catch (e) {
+        Message({ type: "error", text: "确认收货失败" });
+      }
+    };
+    // 查看物流
+    const lookLogistics = (id) => {
+      emit("onLookLogistics", id);
+    };
     return {
       count,
       dayjs,
       orderStatus,
       onCancelOrderHandler,
       onDeleteOrderHandler,
+      onConfirmReceiptHandler,
+      lookLogistics,
     };
   },
 };

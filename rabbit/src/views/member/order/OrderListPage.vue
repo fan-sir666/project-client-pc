@@ -18,6 +18,7 @@
             :order="item"
             @onCancelOrder="onCancelOrder"
             @onReloadOrderList="getData"
+            @onLookLogistics="onLookLogistics"
           ></OrderItem>
         </template>
         <div v-if="!loading && orderList?.items?.length === 0" class="none">
@@ -36,12 +37,14 @@
     ref="cancelOrderComponent"
     @onReloadOrderList="getData"
   ></CancelOrder>
+  <OrderLogistics ref="orderLogisticsInstance"></OrderLogistics>
 </template>
 
 <script>
 import AppMemberLayout from "@/components/AppMemberLayout";
 import OrderItem from "@/views/member/order/components/OrderItem";
 import CancelOrder from "@/views/member/order/components/CancelOrder";
+import OrderLogistics from "@/views/member/order/components/OrderLogistics";
 import { ref, watch } from "vue";
 import { orderStatus } from "@/api/canstants";
 import { getOrderlist } from "@/api/member";
@@ -67,6 +70,13 @@ export default {
       cancelOrderComponent.value.visible = true;
       cancelOrderComponent.value.id = id;
     };
+    // 查看物流弹层组件实例
+    const orderLogisticsInstance = ref();
+    // 点击查看物流
+    const onLookLogistics = (id) => {
+      orderLogisticsInstance.value.visible = true;
+      orderLogisticsInstance.value.id = id;
+    };
     return {
       active,
       orderStatus,
@@ -78,9 +88,11 @@ export default {
       cancelOrderComponent,
       onCancelOrder,
       getData,
+      onLookLogistics,
+      orderLogisticsInstance,
     };
   },
-  components: { AppMemberLayout, OrderItem, CancelOrder },
+  components: { AppMemberLayout, OrderItem, CancelOrder, OrderLogistics },
 };
 // 获取订单列表数据
 function useOrderList() {
@@ -95,7 +107,6 @@ function useOrderList() {
   // 用于存储总页数
   const totalPage = ref(0);
   const getData = async () => {
-    console.log("dsadadasda");
     loading.value = true;
     const { result } = await getOrderlist(reqParams.value);
     orderList.value = result;

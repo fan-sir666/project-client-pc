@@ -50,3 +50,21 @@ export function cancelOrder({ id, cancelReason }) {
 export function deleteOrder(ids) {
   return requestWithToken("/member/order", "delete", { ids });
 }
+
+/**
+ * 确认收货
+ * @param id
+ * @returns {Promise}
+ */
+export function confirmReceiptGoods(id) {
+  return requestWithToken(`/member/order/${id}/receipt`, "PUT");
+}
+
+/**
+ * 查看物流
+ * @param id
+ * @returns {Promise}
+ */
+export function getLogisticsOrder(id) {
+  return requestWithToken(`/member/order/${id}/logistics`, "get");
+}
