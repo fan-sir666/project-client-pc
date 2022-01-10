@@ -19,7 +19,7 @@
             <img v-lazy="item.picture" alt="" />
             <strong class="label">
               <span>{{ item.name }}馆</span>
-              <span>{{ item.saleInfo }}}</span>
+              <span>{{ item.saleInfo }}</span>
             </strong>
           </RouterLink>
           <ul class="goods-list">

@@ -101,8 +101,9 @@ import AppLayout from "@/components/AppLayout";
 import { ref } from "vue";
 import { createOrder, submitOrder } from "@/api/order";
 import Message from "@/components/library/Message";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
+import { createOrderById } from "@/api/member";
 export default {
   name: "CheckoutPage",
   setup() {
@@ -152,10 +153,18 @@ export default {
 function useOrderInfo() {
   // 用于存储订单信息
   const orderInfo = ref(null);
+  const route = useRoute();
   // 生成订单
   const getData = async () => {
-    const { result } = await createOrder();
-    orderInfo.value = result;
+    if (route.query.id) {
+      //  再次购买
+      const { result } = await createOrderById(route.query.id);
+      orderInfo.value = result;
+    } else {
+      // 购物车创建订单
+      const { result } = await createOrder();
+      orderInfo.value = result;
+    }
   };
   // 获取生成的订单信息
   getData();

@@ -6,6 +6,7 @@
       <DetailAction
         v-if="orderDetail"
         :orderDetail="orderDetail"
+        @onOrderListReload="getData($event)"
       ></DetailAction>
       <!-- 步骤条-->
       <XtxSteps
@@ -28,14 +29,23 @@
         ></XtxStepItem>
       </XtxSteps>
       <!-- 物流栏 Suspense确保异步setup同步执行 -->
-      <Suspense>
-        <DetailLogistics></DetailLogistics>
-      </Suspense>
+      <template v-if="orderDetail">
+        <Suspense>
+          <DetailLogistics
+            v-if="[3, 4, 5].includes(orderDetail.orderState)"
+          ></DetailLogistics>
+        </Suspense>
+      </template>
       <!-- 订单商品信息 -->
+      <DetailOrderGoods
+        v-if="orderDetail"
+        :orderDetail="orderDetail"
+      ></DetailOrderGoods>
     </div>
   </AppMemberLayout>
 </template>
 <script>
+import DetailOrderGoods from "@/views/member/order/components/DetailOrderGoods";
 import DetailAction from "@/views/member/order/components/DetailAction";
 import DetailLogistics from "@/views/member/order/components/DetailLogistics";
 import AppMemberLayout from "@/components/AppMemberLayout";
@@ -45,10 +55,15 @@ import { getOrderInfo } from "@/api/order";
 export default {
   name: "OrderDetailPage",
   setup() {
-    const { orderDetail } = useOrderDetail();
-    return { orderDetail };
+    const { orderDetail, getData } = useOrderDetail();
+    return { orderDetail, getData };
   },
-  components: { AppMemberLayout, DetailAction, DetailLogistics },
+  components: {
+    AppMemberLayout,
+    DetailAction,
+    DetailLogistics,
+    DetailOrderGoods,
+  },
 };
 function useOrderDetail() {
   const route = useRoute();
@@ -59,7 +74,7 @@ function useOrderDetail() {
     orderDetail.value = result;
   };
   getData(route.params.id);
-  return { orderDetail };
+  return { orderDetail, getData };
 }
 </script>
 <style scoped lang="less">

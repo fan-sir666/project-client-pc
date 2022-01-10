@@ -68,3 +68,12 @@ export function confirmReceiptGoods(id) {
 export function getLogisticsOrder(id) {
   return requestWithToken(`/member/order/${id}/logistics`, "get");
 }
+
+/**
+ * 再次购买
+ * @param id 订单Id
+ * @returns {Promise}
+ */
+export function createOrderById(id) {
+  return requestWithToken(`/member/order/repurchase/${id}`, "get");
+}

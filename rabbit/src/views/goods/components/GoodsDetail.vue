@@ -5,7 +5,7 @@
     <ul class="attrs">
       <li v-for="item in detailData.details.properties" :key="item.name">
         <span class="dt">{{ item.name }}</span>
-        <span class="dd">{{ item.value }}}</span>
+        <span class="dd">{{ item.value }}</span>
       </li>
     </ul>
     <!-- 图片 -->

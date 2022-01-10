@@ -6,7 +6,7 @@
       <li v-for="item in subCategories" :key="item.id">
         <a href="javascript:">
           <img :src="item.picture" alt="" />
-          <p>{{ item.name }}}</p>
+          <p>{{ item.name }}</p>
         </a>
       </li>
     </ul>

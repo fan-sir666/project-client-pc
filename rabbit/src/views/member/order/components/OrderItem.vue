@@ -63,7 +63,7 @@
           type="primary"
           size="small"
           v-if="order.orderState === 1"
-          @click="$router.push(`/member/pay?orderId=${order.id}`)"
+          @click="$router.push(`/checkout/pay?orderId=${order.id}`)"
           >立即付款</XtxButton
         >
         <XtxButton
