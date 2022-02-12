@@ -13,7 +13,7 @@
         </template>
         <template v-else>
           <li><router-link to="/login">请先登录</router-link></li>
-          <li><a href="javascript:">免费注册</a></li>
+          <li><router-link to="/register">免费注册</router-link></li>
         </template>
         <li><a href="javascript:">我的订单</a></li>
         <li><a href="javascript:">会员中心</a></li>

@@ -114,7 +114,7 @@
     <div class="action">
       <div class="url">
         <a href="javascript:">忘记密码</a>
-        <a href="javascript:">免费注册</a>
+        <router-link to="/register">免费注册</router-link>
       </div>
     </div>
   </div>
@@ -129,11 +129,14 @@ import {
   code,
   isAgree,
 } from "@/utils/vee-validate-schema";
+import { loginByAccountAndPassword } from "@/api/user";
+import useLoginAfter from "@/hooks/useLoginAfter";
 export default {
   name: "LoginForm",
   setup() {
     // 账号手机号切换
     const isMsgLogin = ref(false);
+    const { loginSuccess } = useLoginAfter();
     // 账号登录
     const {
       accountFormHandleSubmit,
@@ -143,7 +146,8 @@ export default {
     // 用户名和密码表单提交
     const onAccountFormSubmit = accountFormHandleSubmit(
       ({ account, password }) => {
-        console.log({ account, password });
+        // console.log({ account, password });
+        loginByAccountAndPassword({ account, password }).then(loginSuccess);
       }
     );
     // 手机号登录

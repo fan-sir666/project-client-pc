@@ -2,7 +2,9 @@
   <router-view />
 </template>
 <script>
-export default {};
+export default {
+  setup() {},
+};
 </script>
 <style lang="less">
 #app {

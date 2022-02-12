@@ -1,10 +1,8 @@
 import axios from "axios";
 import store from "@/store";
 import router from "@/router";
-// 线上环境: https://apipc-xiaotuxian-front.itheima.net/
-// 开发环境: http://pcapi-xiaotuxian-front-devtest.itheima.net/
 // 基准地址
-export const baseURL = "https://apipc-xiaotuxian-front.itheima.net/";
+export const baseURL = "http://localhost:3000";
 // 创建携带token的请求实例
 const instanceWithToken = axios.create({
   baseURL: baseURL,
