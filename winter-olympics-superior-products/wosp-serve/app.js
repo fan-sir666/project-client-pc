@@ -37,7 +37,7 @@ app.use(function(ctx, next) {
 });
 // jwt  加密信息一定要跟token生成使用加密字符串保持一致
 // unless 排除哪些不需要在请求带token
-app.use(jwt({ secret: jwtSecret }).unless({ path: [/^\/public/, /^\/users\/register/, /^\/users\/accountlogin/] }));
+app.use(jwt({ secret: jwtSecret }).unless({ path: [/^\/public/, /^\/users\/register/, /^\/users\/accountlogin/, /^\/users\/smscode/, /^\/users\/mobilelogin/] }));
 
 // 应用cors中间件后端解决跨域
 app.use(cors());

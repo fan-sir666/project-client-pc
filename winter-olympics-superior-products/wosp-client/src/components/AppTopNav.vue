@@ -9,7 +9,7 @@
               ><i class="iconfont icon-user"></i>{{ user.profile.account }}</a
             >
           </li>
-          <li><a href="javascript:">退出登录</a></li>
+          <li><a href="javascript:" @click="logout">退出登录</a></li>
         </template>
         <template v-else>
           <li><router-link to="/login">请先登录</router-link></li>
@@ -28,13 +28,20 @@
 </template>
 <script>
 import { useStore } from "vuex";
+import { useRouter } from "vue-router";
 export default {
   name: "AppTopNav",
   setup() {
     const store = useStore();
+    const router = useRouter();
     // 通过判断用户模块token 切换显示用户名和退出登录
     const user = store.state.user;
-    return { user };
+    // 退出登录
+    const logout = () => {
+      store.commit("user/setUser", {});
+      router.push("/login");
+    };
+    return { user, logout };
   },
 };
 </script>

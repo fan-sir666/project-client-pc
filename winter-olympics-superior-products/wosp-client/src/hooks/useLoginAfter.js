@@ -7,7 +7,6 @@ export default function useLoginAfter() {
   const router = useRouter();
   //  登录成功
   const loginSuccess = ({ status, data, message }) => {
-    // console.log(data);
     if (status === 401) return Message({ type: "warn", text: message });
     //  存储用户信息
     const userInfo = {

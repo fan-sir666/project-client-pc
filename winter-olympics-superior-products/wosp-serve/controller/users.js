@@ -1,4 +1,4 @@
-const { register, findUserByName, findUserInfo } = require('../model/users');
+const { register, findUserByName, findUserInfoByName, updateUserSmsCode, findUserInfoByMobile } = require('../model/users');
 
 // 字段校验
 const Joi = require('joi')
@@ -6,8 +6,7 @@ const Joi = require('joi')
 // jwt鉴权生成token
 const jwt = require('jsonwebtoken');
 
-// 密码加密
-const { cryptoPaddword } = require('../utils');
+const { cryptoPaddword, sendsms, getRandomByLength } = require('../utils');
 
 // 加盐字符窜
 const { secret, jwtSecret } = require('../config');
@@ -36,7 +35,7 @@ module.exports.registerCON = async(ctx) => {
     //#endregion
 
     // 操作数据模型层
-    const user = await findUserByName(username);
+    const user = await findUserByName(username, mobile);
     if (user[0]) {
         ctx.body = {
             status: 0,
@@ -57,7 +56,7 @@ module.exports.registerCON = async(ctx) => {
 module.exports.accountLoginCON = async(ctx) => {
     const { username, password } = ctx.request.body;
     // 操作数据模型层
-    const result = await findUserInfo(username, cryptoPaddword(password + secret));
+    const result = await findUserInfoByName(username, cryptoPaddword(password + secret));
     // 用户是否存在
     if (result[0]) {
         // 在登录成功情况下生成token
@@ -80,6 +79,56 @@ module.exports.accountLoginCON = async(ctx) => {
         ctx.body = {
             status: 401,
             message: '登录失败,请检查用户名或者密码'
+        }
+    }
+}
+
+// 短信验证码
+module.exports.smscodeCON = async(ctx) => {
+    const { mobile } = ctx.request.body;
+    // 获取验证码随机数
+    const code = getRandomByLength(6);
+    // 调用发送短信方法
+    const result = await sendsms(mobile, code);
+
+    if (result.SendStatusSet[0].Code == 'Ok') {
+        // 将验证码存入数据库
+        updateUserSmsCode(mobile, code)
+        ctx.body = {
+            status: 200,
+            data: code,
+            message: '短信发送成功'
+        }
+    }
+}
+
+// 手机号登录
+module.exports.mobileLoginCON = async(ctx) => {
+    const { mobile, code } = ctx.request.body;
+    // 查询用户信息
+    const result = await findUserInfoByMobile(mobile, code)
+        // 用户是否存在
+    if (result[0]) {
+        // 在登录成功情况下生成token
+        const token = jwt.sign({
+            mobile,
+            code
+        }, jwtSecret, { expiresIn: '1h' });
+        ctx.body = {
+            status: 200,
+            data: {
+                id: result[0].id,
+                username: result[0].username,
+                mobile: result[0].mobile,
+                avatar: result[0].avatar,
+                token,
+            },
+            message: '登录成功'
+        }
+    } else {
+        ctx.body = {
+            status: 401,
+            message: '登录失败,请检查验证码是否正确'
         }
     }
 }

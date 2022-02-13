@@ -6,11 +6,21 @@ module.exports.register = async(username, password, mobile) => {
 }
 
 // 根据用户名查询用户
-module.exports.findUserByName = async(username) => {
-    return await query('select * from user where username = ?', [username]);
+module.exports.findUserByName = async(username, mobile) => {
+    return await query('select * from user where username = ? or mobile = ?', [username, mobile]);
 }
 
 // 用户名登录
-module.exports.findUserInfo = async(username, password) => {
+module.exports.findUserInfoByName = async(username, password) => {
     return await query('select * from user where username = ?  and password = ?', [username, password]);
+}
+
+// 更新用户手机号验证码
+module.exports.updateUserSmsCode = async(mobile, code) => {
+    return await query('update user set smscode = ? where mobile = ?', [code, mobile])
+}
+
+// 手机号登录
+module.exports.findUserInfoByMobile = async(mobile, code) => {
+    return await query('select * from user where mobile = ?  and smscode = ?', [mobile, code]);
 }

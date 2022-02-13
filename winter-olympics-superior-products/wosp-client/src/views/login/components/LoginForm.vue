@@ -89,7 +89,12 @@
                 placeholder="请输入验证码"
                 v-model="codeField"
               />
-              <span class="code">发送验证码</span>
+              <span
+                class="code"
+                :class="{ disabled: isActive }"
+                @click="getSmsCode"
+                >{{ isActive ? `剩余${count}秒` : "发送验证码" }}</span
+              >
             </div>
             <div class="error" v-if="codeError">
               <i class="iconfont icon-warning"></i>{{ codeError }}
@@ -129,8 +134,14 @@ import {
   code,
   isAgree,
 } from "@/utils/vee-validate-schema";
-import { loginByAccountAndPassword } from "@/api/user";
+import {
+  loginByAccountAndPassword,
+  getMobileSmsCode,
+  loginByMobileAndCode,
+} from "@/api/user";
 import useLoginAfter from "@/hooks/useLoginAfter";
+import Message from "@/components/library/Message";
+import useCountDown from "@/hooks/useCountDown";
 export default {
   name: "LoginForm",
   setup() {
@@ -154,13 +165,26 @@ export default {
     const {
       mobileFormHandleSubmit,
       mobileFormHandleReset,
-      // mobileIsValidate,
+      mobileIsValidate,
       ...mobileFormValid
     } = useMobileFormValidate();
     // 手机号和验证码表单提交
     const onMobileFormSubmit = mobileFormHandleSubmit(({ mobile, code }) => {
-      console.log(mobile, code);
+      // console.log(mobile, code);
+      loginByMobileAndCode({ mobile, code }).then(loginSuccess);
     });
+    // 倒计时
+    const { count, isActive, start } = useCountDown();
+    // 获取手机验证码
+    const getSmsCode = async () => {
+      let { isValid, mobile } = await mobileIsValidate();
+      // 手机号正确 倒计时未开启
+      if (isValid && !isActive.value) {
+        const { message } = await getMobileSmsCode(mobile);
+        start(60);
+        Message({ type: "success", text: message });
+      }
+    };
     return {
       isMsgLogin,
       onAccountFormSubmit,
@@ -169,6 +193,9 @@ export default {
       onMobileFormSubmit,
       mobileFormHandleReset,
       ...mobileFormValid,
+      getSmsCode,
+      count,
+      isActive,
     };
   },
 };
@@ -298,14 +325,20 @@ function useMobileFormValidate() {
           text-align: center;
           line-height: 34px;
           font-size: 14px;
-          background: #f5f5f5;
-          color: #666;
+          background: #27ba9b;
+          color: #ffffff;
           width: 90px;
           height: 34px;
           cursor: pointer;
         }
         .code.disabled {
-          cursor: wait;
+          -webkit-filter: grayscale(100%);
+          -moz-filter: grayscale(100%);
+          -ms-filter: grayscale(100%);
+          -o-filter: grayscale(100%);
+          filter: grayscale(100%);
+          filter: gray;
+          pointer-events: none;
         }
       }
       > .error {
@@ -342,7 +375,7 @@ function useMobileFormValidate() {
   .action {
     padding: 20px 40px;
     display: flex;
-    justify-content: end;
+    justify-content: flex-end;
     align-items: center;
     .url {
       a {
