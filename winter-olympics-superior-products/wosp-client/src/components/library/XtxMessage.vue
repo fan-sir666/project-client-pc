@@ -1,3 +1,4 @@
+<!-- 提示组件 -->
 <template>
   <Transition name="down">
     <div class="xtx-message" :style="style[type]" v-if="show">

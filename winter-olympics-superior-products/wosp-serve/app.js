@@ -1,6 +1,5 @@
 const Koa = require('koa') // KOA包
 const app = new Koa() // 创建app服务
-const views = require('koa-views') // 处理静态资源
 const json = require('koa-json') // json 格式化
 const onerror = require('koa-onerror') // 处理异常
 const bodyparser = require('koa-bodyparser') // 解析post请求
@@ -17,8 +16,8 @@ const cors = require('koa2-cors')
 require('dotenv').config()
 
 // 加载路由
-const index = require('./routes/index')
 const users = require('./routes/users')
+const home = require('./routes/home')
 
 // error handler 错误处理
 onerror(app)
@@ -37,7 +36,7 @@ app.use(function(ctx, next) {
 });
 // jwt  加密信息一定要跟token生成使用加密字符串保持一致
 // unless 排除哪些不需要在请求带token
-app.use(jwt({ secret: jwtSecret }).unless({ path: [/^\/public/, /^\/users\/register/, /^\/users\/accountlogin/, /^\/users\/smscode/, /^\/users\/mobilelogin/] }));
+app.use(jwt({ secret: jwtSecret }).unless({ path: [/^\/public/, /^\/users/, /^\/home/] }));
 
 // 应用cors中间件后端解决跨域
 app.use(cors());
@@ -49,9 +48,6 @@ app.use(json())
 app.use(logger())
 app.use(require('koa-static')(__dirname + '/public'))
 
-app.use(views(__dirname + '/views', {
-    extension: 'pug'
-}))
 
 // logger 记录日志
 app.use(async(ctx, next) => {
@@ -62,8 +58,8 @@ app.use(async(ctx, next) => {
 })
 
 // routes 注册路由
-app.use(index.routes(), index.allowedMethods())
 app.use(users.routes(), users.allowedMethods())
+app.use(home.routes(), home.allowedMethods())
 
 // error-handling
 app.on('error', (err, ctx) => {

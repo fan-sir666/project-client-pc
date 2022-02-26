@@ -1,3 +1,4 @@
+<!-- 复选框 -->
 <template>
   <div class="xtx-checkbox" @click="toggle">
     <i class="iconfont icon-checked" v-if="isChecked"></i>
