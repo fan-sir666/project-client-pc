@@ -18,6 +18,7 @@ require('dotenv').config()
 // 加载路由
 const users = require('./routes/users')
 const home = require('./routes/home')
+const category = require('./routes/category')
 
 // error handler 错误处理
 onerror(app)
@@ -36,7 +37,7 @@ app.use(function(ctx, next) {
 });
 // jwt  加密信息一定要跟token生成使用加密字符串保持一致
 // unless 排除哪些不需要在请求带token
-app.use(jwt({ secret: jwtSecret }).unless({ path: [/^\/public/, /^\/users/, /^\/home/] }));
+app.use(jwt({ secret: jwtSecret }).unless({ path: [/^\/public/, /^\/users/, /^\/home/, /^\/category/] }));
 
 // 应用cors中间件后端解决跨域
 app.use(cors());
@@ -60,6 +61,7 @@ app.use(async(ctx, next) => {
 // routes 注册路由
 app.use(users.routes(), users.allowedMethods())
 app.use(home.routes(), home.allowedMethods())
+app.use(category.routes(), category.allowedMethods())
 
 // error-handling
 app.on('error', (err, ctx) => {
