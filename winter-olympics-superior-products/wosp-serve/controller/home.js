@@ -18,7 +18,6 @@ module.exports.bannerCON = async(ctx) => {
         // 处理数据
         let data = [];
         for (let i = 0; i < result.length; i++) {
-            console.log(i);
             data.push({
                 id: result[i].id,
                 imgUrl: result[i].img_src,
