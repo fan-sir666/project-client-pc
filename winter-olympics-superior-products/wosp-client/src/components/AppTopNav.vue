@@ -39,6 +39,7 @@ export default {
     // 退出登录
     const logout = () => {
       store.commit("user/setUser", {});
+      store.commit("cart/setCart", []);
       router.push("/login");
     };
     return { user, logout };

@@ -19,7 +19,7 @@ export default {
   mutations: {
     //  添加商品
     addGoodsToCart(state, goods) {
-      //  list已存在实行数量累加，不存在添加到list头部
+      //  list已存在 实行数量累加，不存在添加到list头部
       const index = state.list.findIndex((item) => item.skuId === goods.skuId);
       if (index > -1) {
         //  已存在商品

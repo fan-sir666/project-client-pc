@@ -1,6 +1,6 @@
 <!-- 新鲜好物 -->
 <template>
-  <HomePanel title="新鲜好物" subTitle="冬奥之城 品质靠谱" ref="target">
+  <HomePanel title="新鲜好物" subTitle="营养丰富 致力健康" ref="target">
     <template v-slot:right>
       <XtxMore />
     </template>

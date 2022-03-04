@@ -2,7 +2,7 @@
   <AppLayout>
     <div class="container">
       <!-- 轮播图  -->
-      <XtxCarousel></XtxCarousel>
+      <HomeBanner></HomeBanner>
       <!-- 新鲜好物 -->
       <HomeNew></HomeNew>
       <!-- 热销商品 -->
@@ -15,6 +15,7 @@
 
 <script>
 import AppLayout from "@/components/AppLayout";
+import HomeBanner from "@/views/home/components/homeBanner";
 import HomeNew from "@/views/home/components/HomeNew";
 import HomeBrand from "@/views/home/components/HomeBrand";
 import HomeProduct from "@/views/home/components/HomeProduct";
@@ -22,6 +23,7 @@ export default {
   name: "HomePage",
   components: {
     AppLayout,
+    HomeBanner,
     HomeNew,
     HomeBrand,
     HomeProduct,

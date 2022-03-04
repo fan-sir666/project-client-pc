@@ -5,10 +5,22 @@
       <li
         class="carousel-item"
         :class="{ fade: index === currentIndex }"
-        v-for="(item, index) in banners"
+        v-for="(item, index) in carousels"
         :key="item.id"
       >
-        <RouterLink :to="item.hrefUrl">
+        <!-- 如果 item 是数组就表示当前遍历的同类商品数据 -->
+        <div class="slider" v-if="Array.isArray(item)">
+          <router-link
+            v-for="goods in item"
+            :key="goods.goods_id"
+            :to="goods.hrefUrl"
+          >
+            <img :src="goods.picture" alt="" />
+            <p class="name ellipsis">{{ goods.name }}</p>
+            <p class="price">&yen;{{ goods.price }}</p>
+          </router-link>
+        </div>
+        <RouterLink :to="item.hrefUrl" v-else>
           <img :src="item.imgUrl" alt="" />
         </RouterLink>
       </li>
@@ -22,7 +34,7 @@
     <div class="carousel-indicator">
       <span
         :class="{ active: index === currentIndex }"
-        v-for="(item, index) in banners"
+        v-for="(item, index) in carousels"
         :key="item.id"
         @click="currentIndex = index"
       ></span>
@@ -32,18 +44,23 @@
 
 <script>
 import { onMounted, onUnmounted, ref } from "vue";
-import { getBanners } from "@/api/home";
 
 export default {
   name: "XtxCarousel",
-  setup() {
-    // 用于存储轮播图数据
-    const banners = ref(null);
-    // 获取轮播图数据
-    getBanners().then(({ data }) => {
-      // 存储轮播图数据
-      banners.value = data;
-    });
+  props: {
+    carousels: {
+      type: Array,
+    },
+    autoPlay: {
+      type: Boolean,
+      default: false,
+    },
+    duration: {
+      type: Number,
+      default: 2000,
+    },
+  },
+  setup(props) {
     // 当前索引
     const currentIndex = ref(0);
     // 图片切换
@@ -53,9 +70,9 @@ export default {
       // 如果索引值小于了第一张图片的索引
       if (nextIndex < 0) {
         // 让索引值为最后一张图片的索引
-        currentIndex.value = banners.value.length - 1;
+        currentIndex.value = props.carousels.length - 1;
         // 如果索引值大于了最后一张图片的索引
-      } else if (nextIndex > banners.value.length - 1) {
+      } else if (nextIndex > props.carousels.length - 1) {
         // 让索引值为第一张图片的索引
         currentIndex.value = 0;
       } else {
@@ -67,8 +84,8 @@ export default {
     const timer = ref(null);
     // 开启
     const start = () => {
-      if (banners.value?.length > 1) {
-        timer.value = setInterval(toggle, 2000);
+      if (props.autoPlay && props.carousels.length > 1) {
+        timer.value = setInterval(toggle, props.duration);
       }
     };
     // 停止
@@ -79,7 +96,7 @@ export default {
     onMounted(start);
     // 组件卸载之后停止自动轮播
     onUnmounted(stop);
-    return { banners, currentIndex, toggle, start, stop };
+    return { currentIndex, toggle, start, stop };
   },
 };
 </script>
@@ -103,6 +120,30 @@ export default {
       top: 0;
       opacity: 0;
       transition: opacity 0.5s linear;
+      .slider {
+        display: flex;
+        justify-content: space-around;
+        padding: 60px 40px 0;
+        > a {
+          width: 240px;
+          text-align: center;
+          img {
+            padding: 20px;
+            width: 230px !important;
+            height: 230px !important;
+          }
+          .name {
+            font-size: 16px;
+            color: #666;
+            padding: 0 40px;
+          }
+          .price {
+            font-size: 16px;
+            color: @priceColor;
+            margin-top: 15px;
+          }
+        }
+      }
       &.fade {
         opacity: 1;
         z-index: 1;
@@ -130,7 +171,7 @@ export default {
           margin-left: 12px;
         }
         &.active {
-          background: #fff;
+          background: #f5f5f5;
         }
       }
     }

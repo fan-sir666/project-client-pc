@@ -27,6 +27,8 @@ export default function useLoginAfter() {
     //  跳转页面
     router.push("/").then(() => {
       Message({ type: "success", text: message });
+      // 获取购物车列表
+      store.dispatch("cart/getCartGoodsList");
     });
   };
   //  登录失败

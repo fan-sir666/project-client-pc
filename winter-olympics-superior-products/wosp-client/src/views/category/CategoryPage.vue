@@ -9,7 +9,11 @@
         </Transition>
       </XtxBread>
       <!-- 轮播图  -->
-      <XtxCarousel></XtxCarousel>
+      <XtxCarousel
+        v-if="carousels"
+        :carousels="carousels"
+        :autoPlay="true"
+      ></XtxCarousel>
       <!-- 商品列表展示  -->
       <ShowGoodsList></ShowGoodsList>
     </div>
@@ -21,11 +25,16 @@ import AppLayout from "@/components/AppLayout";
 import ShowGoodsList from "@/views/category/components/ShowGoodsList";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
-import { computed } from "vue";
+import { computed, ref } from "vue";
+import { getBanners } from "@/api/home";
 export default {
   name: "CategoryPage",
   setup() {
-    return { category: useBread() };
+    // 存储轮播图数据
+    const carousels = ref(null);
+    // 获取轮播图数据
+    getBanners().then(({ data }) => (carousels.value = data));
+    return { category: useBread(), carousels };
   },
   components: { AppLayout, ShowGoodsList },
 };

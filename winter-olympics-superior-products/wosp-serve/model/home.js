@@ -7,17 +7,17 @@ module.exports.headCategory = async() => {
 
 // 首页轮播图
 module.exports.banner = async() => {
-    return await query('select * from goods_img where img_type_one = 1');
+    return await query('select * from goods INNER JOIN goods_img where goods.id = goods_img.goods_id AND img_type_one = 1 AND effective = TRUE');
 }
 
 // 新鲜好物
 module.exports.newGoods = async() => {
-    return await query('SELECT * FROM goods INNER JOIN goods_img WHERE goods.id = goods_img.goods_id AND goods_img.img_type_one = 2');
+    return await query('SELECT * FROM goods INNER JOIN goods_img WHERE goods.id = goods_img.goods_id AND goods_img.img_type_one = 2 AND effective = TRUE');
 }
 
 // 热销商品
 module.exports.hotGoods = async() => {
-    return await query('select * from goods_img where img_type_one = 3');
+    return await query('SELECT * FROM goods INNER JOIN goods_img WHERE goods.id = goods_img.goods_id AND goods_img.img_type_one = 3 AND effective = TRUE');
 }
 
 // 参品区块
@@ -25,5 +25,5 @@ module.exports.productCate = async() => {
     return await query('SELECT * FROM category');
 }
 module.exports.productGoods = async(cateId) => {
-    return await query(`select * FROM goods INNER JOIN goods_img WHERE goods.id = goods_img.goods_id AND img_type_two = '4-1' AND cate_id = ${cateId} limit 0,8`);
+    return await query(`select * FROM goods INNER JOIN goods_img WHERE goods.id = goods_img.goods_id AND img_type_two = '4-1' AND effective = TRUE AND cate_id = ${cateId} limit 0,8`);
 }

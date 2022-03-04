@@ -26,10 +26,21 @@ const routes = [
     path: "/goods/:id",
     component: () => import("@/views/goods/GoodsDetailPage"),
   },
+  // 购物车
+  {
+    path: "/cart",
+    component: () => import("@/views/cart/CartPage"),
+  },
+  // 结算
+  {
+    path: "/checkout/order",
+    component: () => import("@/views/pay/CheckoutPage"),
+  },
 ];
 
 const router = createRouter({
   history: createWebHashHistory(),
+  scrollBehavior: () => ({ top: 0 }),
   routes,
 });
 

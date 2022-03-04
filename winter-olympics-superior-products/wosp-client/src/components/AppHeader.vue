@@ -9,20 +9,18 @@
         <i class="iconfont icon-search"></i>
         <input type="text" placeholder="搜一搜" />
       </div>
-      <div class="cart">
-        <a class="curr" href="#">
-          <i class="iconfont icon-cart"></i><em>2</em>
-        </a>
-      </div>
+      <!--  用户登录状态下显示    -->
+      <AppHeaderCart v-if="$store.state.user.profile.token"></AppHeaderCart>
     </div>
   </header>
 </template>
 
 <script>
 import AppHeaderNav from "@/components/AppHeaderNav";
+import AppHeaderCart from "@/components/AppHeaderCart";
 export default {
   name: "AppHeader",
-  components: { AppHeaderNav },
+  components: { AppHeaderNav, AppHeaderCart },
 };
 </script>
 

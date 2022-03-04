@@ -62,8 +62,8 @@ module.exports.accountLoginCON = async(ctx) => {
         // 在登录成功情况下生成token
         const token = jwt.sign({
             username,
-            password
-        }, jwtSecret, { expiresIn: '1h' });
+            userId: result[0].id,
+        }, jwtSecret, { expiresIn: '12h' });
         ctx.body = {
             status: 200,
             data: {
@@ -107,13 +107,14 @@ module.exports.mobileLoginCON = async(ctx) => {
     const { mobile, code } = ctx.request.body;
     // 查询用户信息
     const result = await findUserInfoByMobile(mobile, code)
-        // 用户是否存在
+
+    // 用户是否存在
     if (result[0]) {
         // 在登录成功情况下生成token
         const token = jwt.sign({
-            mobile,
-            code
-        }, jwtSecret, { expiresIn: '1h' });
+            id: result[0].id,
+            username: result[0].username,
+        }, jwtSecret, { expiresIn: '12h' });
         ctx.body = {
             status: 200,
             data: {
