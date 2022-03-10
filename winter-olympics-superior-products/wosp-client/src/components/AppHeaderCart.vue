@@ -4,7 +4,14 @@
     <RouterLink class="curr" to="/cart">
       <i class="iconfont icon-cart"></i><em>{{ effectiveGoodsCount }}</em>
     </RouterLink>
-    <div class="layer" v-if="effectiveGoodsCount > 0 && !isCartPage">
+    <div
+      class="layer"
+      v-if="
+        effectiveGoodsCount > 0 &&
+        !isCartPage &&
+        $route.path !== '/checkout/order'
+      "
+    >
       <div class="list">
         <div
           class="item"
@@ -51,6 +58,7 @@ export default {
   setup() {
     const store = useStore();
     const route = useRoute();
+    store.dispatch("cart/getCartGoodsList");
     // 可购买商品列表
     const effectiveGoodsList = computed(
       () => store.getters["cart/effectiveGoodsList"]

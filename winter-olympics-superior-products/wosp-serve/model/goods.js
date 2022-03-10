@@ -24,6 +24,11 @@ module.exports.getRecommendGoods = async(id, cateId, limitEnd) => {
     AND img_type_two = '4-1' AND effective = TRUE AND goods.cate_id = ${cateId} AND goods.id != ${id} LIMIT 0,${limitEnd}`)
 }
 
+// 猜你喜欢
+module.exports.getHotSale = async() => {
+    return await query(`SELECT * FROM goods INNER JOIN goods_img  WHERE goods.id = goods_img.goods_id AND  img_type_two = '4-1' AND effective = TRUE ORDER BY RAND() LIMIT 16`)
+}
+
 // 热榜商品
 module.exports.hotGoods = async() => {
     return query(`SELECT * FROM goods INNER JOIN goods_img WHERE goods.id = goods_img.goods_id AND img_type_two = '4-1' AND effective = TRUE

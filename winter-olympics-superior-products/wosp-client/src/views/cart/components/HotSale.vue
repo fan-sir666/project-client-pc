@@ -1,9 +1,9 @@
-<!-- 同类商品 -->
+<!-- 猜你喜欢 -->
 <template>
   <div class="goods-relevant">
     <div class="header">
       <i class="icon"></i>
-      <span class="title">商品推荐</span>
+      <span class="title">猜你喜欢</span>
     </div>
     <!-- 此处使用改造后的xtx-carousel.vue -->
     <XtxCarousel v-if="carousels" :carousels="carousels" />
@@ -11,36 +11,15 @@
 </template>
 
 <script>
-import { getGoodsRecommend } from "@/api/goods";
-import { ref, watch } from "vue";
+import { ref } from "vue";
+import { getCartHotSale } from "@/api/cart";
+
 export default {
-  name: "GoodsRelevant",
-  props: {
-    reqParams: {
-      type: Object,
-    },
-  },
-  setup(props) {
-    const { carousels, getData } = useRelativeGoods();
-    // 参数发送变化 setup 不会重新执行  watch 重新获取数据
-    watch(
-      () => props.reqParams,
-      () => {
-        getData(props.reqParams.id, props.reqParams.cate_id);
-      },
-      {
-        immediate: true,
-      }
-    );
-    return { carousels };
-  },
-};
-function useRelativeGoods() {
-  // 轮播图需要的数据结构 [[{}],[{}],[{}]]
-  const carousels = ref([]);
-  const getData = (id, catId) => {
-    // 发送请求获取数据
-    getGoodsRecommend(id, catId).then(({ data }) => {
+  name: "HotSale",
+  setup() {
+    const carousels = ref();
+    const getData = async () => {
+      const { data } = await getCartHotSale();
       // 每页显示4条数据
       const size = 4;
       // 只有计算出了一共有多少页, 才能知道循环多少次才能将数据拆分完成
@@ -53,11 +32,11 @@ function useRelativeGoods() {
         // 取到哪 i*size + size, 由于 slice 方法在截取时不包含第二个参数位置的元素, 所以是 + size, 不是 + size - 1
         carousels.value.push(data.slice(i * size, i * size + size));
       }
-    });
-  };
-
-  return { carousels, getData };
-}
+    };
+    getData();
+    return { carousels };
+  },
+};
 </script>
 
 <style scoped lang="less">

@@ -1,7 +1,7 @@
 /*懒加载图片指令*/
 
 // 导入默认产品图片
-import defaultImage from "@/assets/images/200.png";
+import defaultImage from "@/assets/images/200.jpg";
 const lazy = {
   mounted(el, binding) {
     //  创建元素监听对象

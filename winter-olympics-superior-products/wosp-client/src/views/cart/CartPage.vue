@@ -123,6 +123,7 @@
           </div>
         </div>
         <!-- 猜你喜欢 -->
+        <HotSale></HotSale>
       </div>
     </div>
   </AppLayout>
@@ -130,6 +131,7 @@
 <script>
 import AppLayout from "@/components/AppLayout";
 import EmptyCart from "@/views/cart/components/EmptyCart";
+import HotSale from "@/views/cart/components/HotSale";
 import { useStore } from "vuex";
 import { computed } from "vue";
 import Message from "@/components/library/Message";
@@ -240,7 +242,7 @@ export default {
       jumpToCheckout,
     };
   },
-  components: { AppLayout, EmptyCart },
+  components: { AppLayout, EmptyCart, HotSale },
 };
 </script>
 <style scoped lang="less">

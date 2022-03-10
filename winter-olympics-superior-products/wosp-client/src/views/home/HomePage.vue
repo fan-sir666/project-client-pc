@@ -4,6 +4,7 @@
       <!-- 轮播图  -->
       <HomeBanner></HomeBanner>
       <!-- 新鲜好物 -->
+      <text></text>
       <HomeNew></HomeNew>
       <!-- 热销商品 -->
       <HomeBrand></HomeBrand>

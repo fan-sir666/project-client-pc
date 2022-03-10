@@ -36,6 +36,16 @@ const routes = [
     path: "/checkout/order",
     component: () => import("@/views/pay/CheckoutPage"),
   },
+  // 支付结果
+  {
+    path: "/checkout/payresult",
+    component: () => import("@/views/pay/PayResultPage"),
+  },
+  // 订单详情
+  {
+    path: "/member/order/:id",
+    component: () => import("@/views/member/OrderDetailPage"),
+  },
 ];
 
 const router = createRouter({

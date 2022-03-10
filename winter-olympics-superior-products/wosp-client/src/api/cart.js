@@ -1,4 +1,4 @@
-import { requestWithToken } from "@/utils/request";
+import { requestWithoutToken, requestWithToken } from "@/utils/request";
 
 /**
  * 添加购物车
@@ -57,4 +57,9 @@ export function delSomeCartGoods(type) {
   return requestWithToken("/cart/delsomecartgoods", "post", {
     type,
   });
+}
+
+// 猜你喜欢
+export function getCartHotSale() {
+  return requestWithoutToken("/goods/hotsale", "get");
 }

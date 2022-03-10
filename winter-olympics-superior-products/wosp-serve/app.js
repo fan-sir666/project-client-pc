@@ -24,6 +24,8 @@ const home = require('./routes/home')
 const category = require('./routes/category')
 const goods = require('./routes/goods')
 const cart = require('./routes/cart')
+const address = require('./routes/address')
+const order = require('./routes/order')
 
 
 
@@ -68,6 +70,8 @@ app.use(home.routes(), home.allowedMethods())
 app.use(category.routes(), category.allowedMethods())
 app.use(goods.routes(), goods.allowedMethods())
 app.use(cart.routes(), cart.allowedMethods())
+app.use(address.routes(), address.allowedMethods())
+app.use(order.routes(), order.allowedMethods())
 
 // error-handling
 app.on('error', (err, ctx) => {

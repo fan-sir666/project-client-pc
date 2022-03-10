@@ -1,4 +1,4 @@
-const { getCateGory, getGoodsInfo, getGoodsImg, getRecommendGoods, hotGoods } = require('../model/goods')
+const { getCateGory, getGoodsInfo, getGoodsImg, getRecommendGoods, hotGoods, getHotSale } = require('../model/goods')
 
 // 商品详情信息
 module.exports.detailInfoCON = async(ctx) => {
@@ -55,6 +55,29 @@ module.exports.detailInfoCON = async(ctx) => {
 module.exports.recommendGoodsCON = async(ctx) => {
     const { id, cateId, limit } = ctx.request.body
     const result = await getRecommendGoods(id, cateId, limit)
+    if (result[0]) {
+        // 处理数据
+        let data = [];
+        for (let i = 0; i < result.length; i++) {
+            data.push({
+                goods_id: result[i].goods_id,
+                name: result[i].name,
+                price: result[i].price,
+                picture: result[i].img_src,
+                hrefUrl: `/goods/${result[i].goods_id}`
+            })
+        }
+        // 响应请求并返回数据
+        ctx.body = {
+            status: 200,
+            data: data
+        }
+    }
+}
+
+// 猜你喜欢
+module.exports.hotSaleCON = async(ctx) => {
+    const result = await getHotSale()
     if (result[0]) {
         // 处理数据
         let data = [];
