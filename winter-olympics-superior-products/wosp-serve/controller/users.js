@@ -112,7 +112,7 @@ module.exports.mobileLoginCON = async(ctx) => {
     if (result[0]) {
         // 在登录成功情况下生成token
         const token = jwt.sign({
-            id: result[0].id,
+            userId: result[0].id,
             username: result[0].username,
         }, jwtSecret, { expiresIn: '12h' });
         ctx.body = {
