@@ -7,7 +7,7 @@ module.exports.headCategory = async() => {
 
 // 首页轮播图
 module.exports.banner = async() => {
-    return await query('select * from goods INNER JOIN goods_img where goods.id = goods_img.goods_id AND img_type_one = 1 AND effective = TRUE');
+    return await query('select * from goods INNER JOIN goods_img where goods.id = goods_img.goods_id AND img_type_one = 1 AND effective = TRUE ORDER BY goods_img.id');
 }
 
 // 新鲜好物

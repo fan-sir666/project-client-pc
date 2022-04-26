@@ -2,7 +2,7 @@ import axios from "axios";
 import store from "@/store";
 import router from "@/router";
 // 基准地址
-export const baseURL = "http://localhost:3000";
+export const baseURL = "http://fzwyyds.com:3000";
 // 创建携带token的请求实例
 const instanceWithToken = axios.create({
   baseURL: baseURL,

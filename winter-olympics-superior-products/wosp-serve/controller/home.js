@@ -14,6 +14,7 @@ module.exports.headCategoryCON = async(ctx) => {
 // 首页轮播图
 module.exports.bannerCON = async(ctx) => {
     const result = await banner()
+    console.log(result);
     if (result[0]) {
         // 处理数据
         let data = [];
