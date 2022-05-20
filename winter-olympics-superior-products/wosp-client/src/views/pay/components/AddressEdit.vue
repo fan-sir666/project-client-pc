@@ -3,7 +3,7 @@
   <XtxDialog
     ref="xtxDialogInstance"
     v-model:visible="visible"
-    title="添加收货地址"
+    :title="address?.id?'修改收货地址':'添加收货地址'"
   >
     <template v-slot:default>
       <div class="address-edit">
